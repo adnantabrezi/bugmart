@@ -1,0 +1,1082 @@
+[
+  {
+    "id": "BUG-001",
+    "title": "Password pattern 'Pass123!' causes login form submit to fail silently",
+    "category": "UI / FUNCTIONAL BUGS",
+    "difficulty": "EASY",
+    "steps": [
+      "Navigate to /login",
+      "Enter email 'user@bugmart.com'",
+      "Enter password 'Pass123!'",
+      "Click 'Sign In' button"
+    ],
+    "expected": "Login should succeed or return an authentication error message.",
+    "actual": "Form submit listener exits silently without calling the API or displaying an error.",
+    "affected_component": "frontend/src/pages/LoginPage.tsx",
+    "related_concept": "Black Box Testing"
+  },
+  {
+    "id": "BUG-002",
+    "title": "Search clear button resets text box but does not update product grid",
+    "category": "UI / FUNCTIONAL BUGS",
+    "difficulty": "EASY",
+    "steps": [
+      "Type a search query in the header search bar (e.g. 'Laptop')",
+      "Click the 'X' clear button inside the search input"
+    ],
+    "expected": "Search box clears and product grid re-fetches to display all products.",
+    "actual": "Search text box clears but product grid remains filtered to previous query.",
+    "affected_component": "frontend/src/components/Navbar.tsx",
+    "related_concept": "Usability Testing"
+  },
+  {
+    "id": "BUG-003",
+    "title": "Product sorting 'Price: Low to High' sorts in descending order when category filter is active",
+    "category": "UI / FUNCTIONAL BUGS",
+    "difficulty": "MEDIUM",
+    "steps": [
+      "Navigate to /products",
+      "Select category 'Electronics'",
+      "Select sort option 'Price: Low to High'"
+    ],
+    "expected": "Products should be sorted from lowest price to highest price.",
+    "actual": "Products are sorted in descending order (highest price first).",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "Integration Testing"
+  },
+  {
+    "id": "BUG-004",
+    "title": "Pagination skips product #10 when transitioning to Page 2",
+    "category": "UI / FUNCTIONAL BUGS",
+    "difficulty": "MEDIUM",
+    "steps": [
+      "Navigate to /products",
+      "View products on Page 1 (items 1 through 8)",
+      "Click 'Next' button to navigate to Page 2"
+    ],
+    "expected": "Page 2 should display item #9 through item #16 sequentially.",
+    "actual": "Product #10 is skipped due to off-by-one pagination skip calculation on backend.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "Boundary Value Analysis"
+  },
+  {
+    "id": "BUG-005",
+    "title": "Quick View 'Add to Cart' updates cart state but fails to update header badge count",
+    "category": "UI / FUNCTIONAL BUGS",
+    "difficulty": "EASY",
+    "steps": [
+      "Click the eye icon on any product card to open Quick View modal",
+      "Click 'Add to Cart' button inside modal"
+    ],
+    "expected": "Product is added to cart and header cart badge counter increments by 1.",
+    "actual": "Product is added to cart but header badge counter remains unchanged until page reload.",
+    "affected_component": "frontend/src/context/CartContext.tsx",
+    "related_concept": "System Testing"
+  },
+  {
+    "id": "BUG-006",
+    "title": "Rapidly clicking quantity '+' drops increment pulses due to stale closure state",
+    "category": "UI / FUNCTIONAL BUGS",
+    "difficulty": "MEDIUM",
+    "steps": [
+      "Navigate to /cart",
+      "Rapidly click '+' quantity button 5 times in less than 1 second"
+    ],
+    "expected": "Cart quantity increments by 5.",
+    "actual": "Cart quantity increments by only 1 or 2 due to un-callback state updates.",
+    "affected_component": "frontend/src/context/CartContext.tsx",
+    "related_concept": "State Synchronization"
+  },
+  {
+    "id": "BUG-007",
+    "title": "Remove-from-cart hides row visually but fails to call backend DELETE endpoint",
+    "category": "UI / FUNCTIONAL BUGS",
+    "difficulty": "MEDIUM",
+    "steps": [
+      "Add an item to shopping cart",
+      "Navigate to /cart and click the Trash icon to remove item",
+      "Refresh the browser page"
+    ],
+    "expected": "Item is permanently deleted from cart database.",
+    "actual": "Item vanishes from UI initially, but reappears upon browser page refresh.",
+    "affected_component": "frontend/src/context/CartContext.tsx",
+    "related_concept": "Integration Testing"
+  },
+  {
+    "id": "BUG-008",
+    "title": "Broken image URL for seeded product #8 (Wireless Earbuds)",
+    "category": "UI / FUNCTIONAL BUGS",
+    "difficulty": "EASY",
+    "steps": [
+      "Navigate to /products or filter by Electronics",
+      "Locate product 'Wireless Noise-Canceling Earbuds'"
+    ],
+    "expected": "Product displays valid product image.",
+    "actual": "Image source contains invalid file extension '.pngg', displaying placeholder fallback.",
+    "affected_component": "backend/prisma/seed.ts",
+    "related_concept": "Black Box Testing"
+  },
+  {
+    "id": "BUG-009",
+    "title": "Mobile navigation menu sheet does not close upon link selection",
+    "category": "UI / FUNCTIONAL BUGS",
+    "difficulty": "EASY",
+    "steps": [
+      "Resize browser window below 768px (mobile viewport)",
+      "Tap hamburger menu icon",
+      "Tap any link in the mobile drawer (e.g. 'All Products')"
+    ],
+    "expected": "Mobile navigation drawer closes automatically after navigation.",
+    "actual": "Page navigates but mobile navigation drawer stays open overlaying content.",
+    "affected_component": "frontend/src/components/Navbar.tsx",
+    "related_concept": "Usability Testing"
+  },
+  {
+    "id": "BUG-010",
+    "title": "Back button from checkout returns to /profile instead of /products",
+    "category": "UI / FUNCTIONAL BUGS",
+    "difficulty": "EASY",
+    "steps": [
+      "Navigate to /checkout",
+      "Click 'Back to Shopping' button at top of page"
+    ],
+    "expected": "Navigates back to product catalog /products.",
+    "actual": "Navigates incorrectly to user profile page /profile.",
+    "affected_component": "frontend/src/pages/CheckoutPage.tsx",
+    "related_concept": "Usability Testing"
+  },
+  {
+    "id": "BUG-011",
+    "title": "Registration accepts invalid email format ending in .com without @ symbol",
+    "category": "INPUT VALIDATION BUGS",
+    "difficulty": "EASY",
+    "steps": [
+      "Navigate to /register",
+      "Enter email 'invalidemail.com' (missing @)",
+      "Submit registration form"
+    ],
+    "expected": "Form throws validation error 'Invalid email format'.",
+    "actual": "Registration succeeds because backend regex allows '.com' without '@'.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "Equivalence Partitioning"
+  },
+  {
+    "id": "BUG-012",
+    "title": "Username registration accepts leading and trailing whitespace without trimming",
+    "category": "INPUT VALIDATION BUGS",
+    "difficulty": "EASY",
+    "steps": [
+      "Navigate to /register",
+      "Enter full name '   John Doe   '",
+      "Complete registration and inspect profile"
+    ],
+    "expected": "Name should be trimmed to 'John Doe'.",
+    "actual": "Spaces are preserved in database as '   John Doe   '.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "Equivalence Partitioning"
+  },
+  {
+    "id": "BUG-013",
+    "title": "Password validation enforces strictly > 6 length, rejecting valid 6-character passwords",
+    "category": "INPUT VALIDATION BUGS",
+    "difficulty": "MEDIUM",
+    "steps": [
+      "Navigate to /register",
+      "Enter password '123456' (exactly 6 characters)",
+      "Submit form"
+    ],
+    "expected": "Registration accepts 6-character password.",
+    "actual": "Fails with error 'Password must be longer than 6 characters'.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "Boundary Value Analysis"
+  },
+  {
+    "id": "BUG-014",
+    "title": "Cart quantity input allows entering '0' manually via keyboard",
+    "category": "INPUT VALIDATION BUGS",
+    "difficulty": "EASY",
+    "steps": [
+      "Navigate to /cart",
+      "Manually type '0' in the quantity input field"
+    ],
+    "expected": "Input rejects 0 or prompts user to confirm item removal.",
+    "actual": "Quantity accepts 0, resulting in 0 quantity row with 0 subtotal.",
+    "affected_component": "frontend/src/pages/CartPage.tsx",
+    "related_concept": "Boundary Value Analysis"
+  },
+  {
+    "id": "BUG-015",
+    "title": "Backend POST /api/cart accepts negative quantity payload",
+    "category": "INPUT VALIDATION BUGS",
+    "difficulty": "MEDIUM",
+    "steps": [
+      "Send API POST /api/cart with body `{\"productId\": 1, \"quantity\": -2}`"
+    ],
+    "expected": "API returns 400 Bad Request error.",
+    "actual": "Saves negative quantity -2 in database and subtracts amount from total.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "API Testing"
+  },
+  {
+    "id": "BUG-016",
+    "title": "Checkout shipping address accepts string containing only whitespace",
+    "category": "INPUT VALIDATION BUGS",
+    "difficulty": "EASY",
+    "steps": [
+      "Navigate to /checkout",
+      "Clear address field and type '   ' (3 spaces)",
+      "Click 'Complete Order'"
+    ],
+    "expected": "Validation error 'Shipping address is required'.",
+    "actual": "Address passes frontend validation and order is placed with blank address.",
+    "affected_component": "frontend/src/pages/CheckoutPage.tsx",
+    "related_concept": "Equivalence Partitioning"
+  },
+  {
+    "id": "BUG-017",
+    "title": "Coupon code input fails for lowercase input 'welcome10'",
+    "category": "INPUT VALIDATION BUGS",
+    "difficulty": "EASY",
+    "steps": [
+      "Navigate to /cart or /checkout",
+      "Type coupon code 'welcome10' in lowercase",
+      "Click Apply"
+    ],
+    "expected": "Coupon is normalized to uppercase WELCOME10 and applied.",
+    "actual": "Returns error 'Invalid or inactive coupon code'.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "Equivalence Partitioning"
+  },
+  {
+    "id": "BUG-018",
+    "title": "Search query with special characters '%' or '?' triggers HTTP 500 error",
+    "category": "INPUT VALIDATION BUGS",
+    "difficulty": "MEDIUM",
+    "steps": [
+      "Navigate to /search",
+      "Type '%' or '?' into search box"
+    ],
+    "expected": "Search handles special characters safely or returns no results.",
+    "actual": "Backend throws URIError resulting in HTTP 500 server error.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "White Box Testing"
+  },
+  {
+    "id": "BUG-019",
+    "title": "Min Price filter accepts non-numeric string 'abc' returning empty product list",
+    "category": "INPUT VALIDATION BUGS",
+    "difficulty": "MEDIUM",
+    "steps": [
+      "Navigate to /products",
+      "Type 'abc' in Min Price input field"
+    ],
+    "expected": "Validation error or ignored non-numeric input.",
+    "actual": "Sends NaN to query, returning empty product list with no error message.",
+    "affected_component": "frontend/src/pages/ProductsPage.tsx",
+    "related_concept": "Equivalence Partitioning"
+  },
+  {
+    "id": "BUG-020",
+    "title": "Checkout phone number accepts non-numeric characters e.g. '+1-800-CALL-ME'",
+    "category": "INPUT VALIDATION BUGS",
+    "difficulty": "EASY",
+    "steps": [
+      "Navigate to /checkout",
+      "Enter phone number '+1-800-CALL-ME'",
+      "Submit order"
+    ],
+    "expected": "Phone number field validates numeric format.",
+    "actual": "Order completes accepting letters in phone number.",
+    "affected_component": "frontend/src/pages/CheckoutPage.tsx",
+    "related_concept": "Equivalence Partitioning"
+  },
+  {
+    "id": "BUG-021",
+    "title": "Cart quantity limit max 10 fails when quantity is set to exactly 10",
+    "category": "BOUNDARY VALUE BUGS",
+    "difficulty": "MEDIUM",
+    "steps": [
+      "Navigate to /cart",
+      "Set item quantity to 10"
+    ],
+    "expected": "Quantity 10 is accepted (since limit is 1-10).",
+    "actual": "Fails with error 'Quantity must be strictly less than 10 items'.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "Boundary Value Analysis"
+  },
+  {
+    "id": "BUG-022",
+    "title": "Coupon WELCOME10 fails on exact ₹1,000 cart subtotal",
+    "category": "BOUNDARY VALUE BUGS",
+    "difficulty": "MEDIUM",
+    "steps": [
+      "Add items totaling exactly ₹1,000 to cart",
+      "Apply coupon code WELCOME10"
+    ],
+    "expected": "10% discount is applied to cart.",
+    "actual": "Returns error 'Cart total must be greater than ₹1,000'.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "Boundary Value Analysis"
+  },
+  {
+    "id": "BUG-023",
+    "title": "Free shipping condition charges ₹99 shipping fee on exact ₹2,000 total",
+    "category": "BOUNDARY VALUE BUGS",
+    "difficulty": "MEDIUM",
+    "steps": [
+      "Add items totaling exactly ₹2,000 to cart",
+      "Proceed to checkout"
+    ],
+    "expected": "Shipping fee should be FREE (₹0).",
+    "actual": "Shipping fee of ₹99 is charged because condition checks subtotal > 2000.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "Boundary Value Analysis"
+  },
+  {
+    "id": "BUG-024",
+    "title": "Coupon expiration checks strictly < midnight timestamp declaring coupon expired on expiry day",
+    "category": "BOUNDARY VALUE BUGS",
+    "difficulty": "MEDIUM",
+    "steps": [
+      "Apply coupon EXPIRED50 on its exact expiry date"
+    ],
+    "expected": "Coupon should be valid until end of expiry date.",
+    "actual": "Declared expired at 00:00:00 on expiry day.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "Boundary Value Analysis"
+  },
+  {
+    "id": "BUG-025",
+    "title": "Product review rating accepts 0 and 6 stars",
+    "category": "BOUNDARY VALUE BUGS",
+    "difficulty": "MEDIUM",
+    "steps": [
+      "Navigate to any product detail page",
+      "Type '0' or '6' in review rating box and submit"
+    ],
+    "expected": "Rating input accepts only 1 to 5 stars.",
+    "actual": "Review is saved with 0 or 6 stars.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "Boundary Value Analysis"
+  },
+  {
+    "id": "BUG-026",
+    "title": "Admin Add Product name limit allows 2 and 51 characters",
+    "category": "BOUNDARY VALUE BUGS",
+    "difficulty": "MEDIUM",
+    "steps": [
+      "Navigate to /admin",
+      "Enter product name with 2 characters (e.g. 'Ab')",
+      "Click Add Product"
+    ],
+    "expected": "Fails validation (min 3 characters).",
+    "actual": "Product is created with 2-character name.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "Boundary Value Analysis"
+  },
+  {
+    "id": "BUG-027",
+    "title": "Category discount calculation applies discount to unit price once excluding quantity",
+    "category": "BUSINESS LOGIC BUGS",
+    "difficulty": "HARD",
+    "steps": [
+      "Add 3 units of Electronics item with 10% discount",
+      "Check item row subtotal in cart"
+    ],
+    "expected": "10% discount applied to total item price (3 * price * 0.9).",
+    "actual": "Discount applied once to single unit price.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "Regression Testing"
+  },
+  {
+    "id": "BUG-028",
+    "title": "Cart API subtotal calculation skips items with exactly 0% discount",
+    "category": "BUSINESS LOGIC BUGS",
+    "difficulty": "HARD",
+    "steps": [
+      "Add item with 0% discount (e.g. Ergonomic Optical Mouse ₹1,299) to cart",
+      "View cart subtotal from GET /api/cart"
+    ],
+    "expected": "Subtotal includes ₹1,299.",
+    "actual": "Subtotal is ₹0 because calculation loop skips items where discount == 0.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "White Box Testing"
+  },
+  {
+    "id": "BUG-029",
+    "title": "Tax is calculated on original subtotal BEFORE applying coupon discount",
+    "category": "BUSINESS LOGIC BUGS",
+    "difficulty": "HARD",
+    "steps": [
+      "Add items totaling ₹2,000 to cart",
+      "Apply coupon SUPER20 (20% off = ₹400 off, discounted subtotal = ₹1,600)",
+      "Inspect GST Tax line item"
+    ],
+    "expected": "Tax = 18% of ₹1,600 = ₹288.00.",
+    "actual": "Tax = 18% of ₹2,000 = ₹360.00 (calculated before discount).",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "System Testing"
+  },
+  {
+    "id": "BUG-030",
+    "title": "Checkout adds ₹99 express shipping fee even when eligible for free shipping",
+    "category": "BUSINESS LOGIC BUGS",
+    "difficulty": "MEDIUM",
+    "steps": [
+      "Place order over ₹2,000 and select Express Shipping option"
+    ],
+    "expected": "Free shipping covers standard order; express fee added clearly.",
+    "actual": "Shipping fee stacks inappropriately.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "Black Box Testing"
+  },
+  {
+    "id": "BUG-031",
+    "title": "Coupon code sent as comma-separated string applies double discount",
+    "category": "BUSINESS LOGIC BUGS",
+    "difficulty": "HARD",
+    "steps": [
+      "Send checkout payload with `couponCode: 'WELCOME10,WELCOME10'`"
+    ],
+    "expected": "Coupon applied once (10% off).",
+    "actual": "Discount doubled to 20% off.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "Security / Business Logic"
+  },
+  {
+    "id": "BUG-032",
+    "title": "Fixed discount coupon SAVE100 causes order total to become negative on cart total < 100",
+    "category": "BUSINESS LOGIC BUGS",
+    "difficulty": "HARD",
+    "steps": [
+      "Add single item worth ₹50 to cart",
+      "Apply SAVE100 coupon"
+    ],
+    "expected": "Total capped at ₹0.",
+    "actual": "Order total becomes negative (-₹50).",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "Boundary Value Analysis"
+  },
+  {
+    "id": "BUG-033",
+    "title": "Out of stock products (stock: 0) still render enabled 'Add to Cart' button on Search page",
+    "category": "BUSINESS LOGIC BUGS",
+    "difficulty": "MEDIUM",
+    "steps": [
+      "Search for 'Athletic Jogger Sweatpants' (out of stock product)",
+      "Observe 'Add to Cart' button"
+    ],
+    "expected": "Button should be disabled with 'Out of Stock' label.",
+    "actual": "Button is enabled and allows adding out-of-stock product to cart.",
+    "affected_component": "frontend/src/pages/SearchPage.tsx",
+    "related_concept": "Black Box Testing"
+  },
+  {
+    "id": "BUG-034",
+    "title": "User can add quantity exceeding available product stock",
+    "category": "BUSINESS LOGIC BUGS",
+    "difficulty": "MEDIUM",
+    "steps": [
+      "Find product with 4 units of stock",
+      "Add 50 units to cart via API"
+    ],
+    "expected": "API rejects request 'Quantity exceeds available stock'.",
+    "actual": "50 units added to cart successfully.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "System Testing"
+  },
+  {
+    "id": "BUG-035",
+    "title": "Changing item quantity in cart updates row subtotal but does not recalculate cart grand total",
+    "category": "BUSINESS LOGIC BUGS",
+    "difficulty": "HARD",
+    "steps": [
+      "Navigate to /cart",
+      "Change item quantity from 1 to 5"
+    ],
+    "expected": "Row total and Grand Total both update immediately.",
+    "actual": "Row total updates, but Grand Total box shows old total until page reload.",
+    "affected_component": "frontend/src/context/CartContext.tsx",
+    "related_concept": "State Synchronization"
+  },
+  {
+    "id": "BUG-036",
+    "title": "Order total differs between Checkout preview screen and Order History details",
+    "category": "BUSINESS LOGIC BUGS",
+    "difficulty": "HARD",
+    "steps": [
+      "Note preview total on checkout screen (e.g. ₹1,450.00)",
+      "Complete order and open order details in /orders"
+    ],
+    "expected": "Saved order total matches checkout preview total.",
+    "actual": "Order History total is ₹1,550.00 (adds hidden ₹100 handling fee on backend).",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "Integration Testing"
+  },
+  {
+    "id": "BUG-037",
+    "title": "Seeded product 'Smart Fitness Watch' displays price ₹2,999 on catalog but charges ₹3,499 in cart",
+    "category": "BUSINESS LOGIC BUGS",
+    "difficulty": "HARD",
+    "steps": [
+      "View 'Smart Fitness Watch' on homepage (displayed price ₹2,999)",
+      "Click 'Add to Cart' and open cart"
+    ],
+    "expected": "Cart item price is ₹2,999.",
+    "actual": "Cart item price is ₹3,499 (database price mismatch).",
+    "affected_component": "frontend/src/components/ProductCard.tsx",
+    "related_concept": "Black Box Testing"
+  },
+  {
+    "id": "BUG-038",
+    "title": "Admin can move CANCELLED order back to PROCESSING status without stock validation",
+    "category": "BUSINESS LOGIC BUGS",
+    "difficulty": "MEDIUM",
+    "steps": [
+      "Navigate to /admin",
+      "Find a CANCELLED order",
+      "Change status dropdown to 'PROCESSING'"
+    ],
+    "expected": "System rejects transition or validates inventory.",
+    "actual": "Status changes back to PROCESSING without error.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "State Machine / Transition Testing"
+  },
+  {
+    "id": "BUG-039",
+    "title": "Protected /orders page renders full UI table for 1.5s before auth check redirect",
+    "category": "AUTHENTICATION / AUTHORIZATION BUGS",
+    "difficulty": "HARD",
+    "steps": [
+      "Logout of account",
+      "Navigate directly to /orders URL"
+    ],
+    "expected": "Page immediately redirects to /login without rendering page content.",
+    "actual": "Order History table renders for 1.5 seconds before redirecting.",
+    "affected_component": "frontend/src/pages/OrdersPage.tsx",
+    "related_concept": "Authentication"
+  },
+  {
+    "id": "BUG-040",
+    "title": "Logout clears localStorage token but leaves user profile in sessionStorage",
+    "category": "AUTHENTICATION / AUTHORIZATION BUGS",
+    "difficulty": "HARD",
+    "steps": [
+      "Log in as Alex Mercer",
+      "Click Logout icon",
+      "Inspect Navbar header greeting"
+    ],
+    "expected": "User state cleared, header displays 'Sign In'.",
+    "actual": "Header greeting continues to display 'Alex' from sessionStorage.",
+    "affected_component": "frontend/src/context/AuthContext.tsx",
+    "related_concept": "Authentication State Management"
+  },
+  {
+    "id": "BUG-041",
+    "title": "Standard customer user can navigate to /admin route without router guard block",
+    "category": "AUTHENTICATION / AUTHORIZATION BUGS",
+    "difficulty": "HARD",
+    "steps": [
+      "Log in as regular customer (user@bugmart.com)",
+      "Type URL /admin in browser address bar"
+    ],
+    "expected": "Redirected to 403 Forbidden or Home page.",
+    "actual": "Admin dashboard renders for customer user.",
+    "affected_component": "frontend/src/pages/AdminDashboardPage.tsx",
+    "related_concept": "Authorization"
+  },
+  {
+    "id": "BUG-042": "Product edit API accepts non-admin requests if header X-Demo-Override: true is included",
+    "category": "AUTHENTICATION / AUTHORIZATION BUGS",
+    "difficulty": "HARD",
+    "steps": [
+      "Send PATCH /api/products/1 with customer token and header `X-Demo-Override: true`"
+    ],
+    "expected": "API returns 403 Forbidden.",
+    "actual": "Product updated successfully.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "Authorization / API Security"
+  },
+  {
+    "id": "BUG-043",
+    "title": "Password reset request endpoint returns success for non-existent email addresses",
+    "category": "AUTHENTICATION / AUTHORIZATION BUGS",
+    "difficulty": "EASY",
+    "steps": [
+      "Send POST /api/auth/reset-password-request with email 'nonexistent@fake.com'"
+    ],
+    "expected": "Returns error 'Email address not found'.",
+    "actual": "Returns success message 'Password reset link sent'.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "Black Box Testing"
+  },
+  {
+    "id": "BUG-044",
+    "title": "Session token expiration is checked using client machine clock instead of server timestamp",
+    "category": "AUTHENTICATION / AUTHORIZATION BUGS",
+    "difficulty": "HARD",
+    "steps": [
+      "Log in to application",
+      "Change local operating system clock forward by 2 days"
+    ],
+    "expected": "Server validates token against server time.",
+    "actual": "Frontend declares token expired prematurely based on client clock.",
+    "affected_component": "frontend/src/context/AuthContext.tsx",
+    "related_concept": "System Integration"
+  },
+  {
+    "id": "BUG-045",
+    "title": "Switching user accounts without closing tab retains previous user's address in checkout state",
+    "category": "AUTHENTICATION / AUTHORIZATION BUGS",
+    "difficulty": "HARD",
+    "steps": [
+      "Log in as Customer 1 and add shipping address",
+      "Log out and log in as Customer 2",
+      "Navigate to /checkout"
+    ],
+    "expected": "Checkout form displays Customer 2's address.",
+    "actual": "Form retains Customer 1's cached address.",
+    "affected_component": "frontend/src/pages/CheckoutPage.tsx",
+    "related_concept": "State Management"
+  },
+  {
+    "id": "BUG-046",
+    "title": "GET /api/orders/:id does not verify order ownership (IDOR vulnerability)",
+    "category": "ID / OBJECT ACCESS BUGS",
+    "difficulty": "HARD",
+    "steps": [
+      "Log in as Customer 1 (user@bugmart.com)",
+      "Navigate to /orders/2 (Customer 2's order ID)"
+    ],
+    "expected": "API returns 403 Forbidden 'Access Denied'.",
+    "actual": "API returns Customer 2's order details and address.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "Object Level Authorization (BOLA/IDOR)"
+  },
+  {
+    "id": "BUG-047",
+    "title": "User profile endpoint GET /api/profile?userId=X exposes any user's profile details",
+    "category": "ID / OBJECT ACCESS BUGS",
+    "difficulty": "HARD",
+    "steps": [
+      "Log in as Customer 1",
+      "Navigate to /profile?userId=3 (Admin user ID)"
+    ],
+    "expected": "Displays Customer 1's profile only.",
+    "actual": "Displays Admin user's profile details and phone number.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "Object Level Authorization"
+  },
+  {
+    "id": "BUG-048",
+    "title": "DELETE /api/cart/:id deletes cart item without verifying user ownership",
+    "category": "ID / OBJECT ACCESS BUGS",
+    "difficulty": "HARD",
+    "steps": [
+      "Send DELETE /api/cart/1 as Customer 2 for Customer 1's cart item ID"
+    ],
+    "expected": "API returns 403 Forbidden.",
+    "actual": "Cart item deleted successfully.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "Object Level Authorization"
+  },
+  {
+    "id": "BUG-049",
+    "title": "POST /api/coupons/apply returns HTTP 200 OK for invalid coupons instead of HTTP 400",
+    "category": "API BUGS",
+    "difficulty": "MEDIUM",
+    "steps": [
+      "Send POST /api/coupons/apply with code 'FAKE100'",
+      "Inspect HTTP status code"
+    ],
+    "expected": "HTTP 400 Bad Request.",
+    "actual": "HTTP 200 OK with `{ success: false }` body.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "API Testing"
+  },
+  {
+    "id": "BUG-050",
+    "title": "GET /api/products/99999 returns HTTP 500 Server Error instead of HTTP 404 Not Found",
+    "category": "API BUGS",
+    "difficulty": "MEDIUM",
+    "steps": [
+      "Send GET /api/products/99999 for non-existent product ID"
+    ],
+    "expected": "HTTP 404 Not Found.",
+    "actual": "HTTP 500 Internal Server Error.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "API Testing"
+  },
+  {
+    "id": "BUG-051",
+    "title": "POST /api/auth/register accepts payload missing confirmPassword field",
+    "category": "API BUGS",
+    "difficulty": "MEDIUM",
+    "steps": [
+      "Send POST /api/auth/register without confirmPassword in JSON payload"
+    ],
+    "expected": "Validation error 'confirmPassword field is required'.",
+    "actual": "Registration succeeds.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "API Testing"
+  },
+  {
+    "id": "BUG-052",
+    "title": "GET /api/products?debug=true dumps database connection string in response header",
+    "category": "API BUGS",
+    "difficulty": "HARD",
+    "steps": [
+      "Send GET /api/products?debug=true",
+      "Inspect response HTTP headers"
+    ],
+    "expected": "Debug mode disabled or sanitized.",
+    "actual": "Response header `X-Debug-Db-Conn` leaks database credentials.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "Security Testing / Information Disclosure"
+  },
+  {
+    "id": "BUG-053",
+    "title": "Cart subtotal in GET /api/cart rounds down to nearest integer (floor) causing 1-rupee mismatch",
+    "category": "API BUGS",
+    "difficulty": "HARD",
+    "steps": [
+      "Add item with price ₹499.90 to cart",
+      "Compare API subtotal vs frontend sum"
+    ],
+    "expected": "Subtotal = ₹499.90.",
+    "actual": "API returns subtotal = 499 (floored).",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "API / Calculation Testing"
+  },
+  {
+    "id": "BUG-054",
+    "title": "GET /api/products/:id returns discount: null for 0% discount products",
+    "category": "API BUGS",
+    "difficulty": "MEDIUM",
+    "steps": [
+      "Fetch product details for product with 0% discount (e.g. ID 4)"
+    ],
+    "expected": "Returns `discount: 0`.",
+    "actual": "Returns `discount: null`.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "API Schema Contract Testing"
+  },
+  {
+    "id": "BUG-055",
+    "title": "PATCH /api/cart/:id accepts quantity as string '5' causing string concatenation",
+    "category": "API BUGS",
+    "difficulty": "HARD",
+    "steps": [
+      "Send PATCH /api/cart/1 with `{\"quantity\": \"5\"}`"
+    ],
+    "expected": "Parsed as integer 5 or error thrown.",
+    "actual": "Saved as string '5', next increment yields '51'.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "Type Safety / API Testing"
+  },
+  {
+    "id": "BUG-056",
+    "title": "POST /api/auth/login returns passwordHash field in response JSON",
+    "category": "API BUGS",
+    "difficulty": "HARD",
+    "steps": [
+      "Log in via API and inspect JSON response payload"
+    ],
+    "expected": "User object contains id, name, email, role only.",
+    "actual": "User object includes `passwordHash` in cleartext.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "Data Exposure Testing"
+  },
+  {
+    "id": "BUG-057",
+    "title": "Deleted products remain active in user's shopping cart",
+    "category": "DATABASE / STATE BUGS",
+    "difficulty": "MEDIUM",
+    "steps": [
+      "Add product to cart",
+      "Delete product from Admin dashboard",
+      "Open shopping cart"
+    ],
+    "expected": "Cart flags item as 'Unavailable' or removes it.",
+    "actual": "Deleted product remains in cart and can be checked out.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "Database Referential Integrity"
+  },
+  {
+    "id": "BUG-058",
+    "title": "Checkout failure decrements product inventory stock before payment completes",
+    "category": "DATABASE / STATE BUGS",
+    "difficulty": "HARD",
+    "steps": [
+      "Note stock of product (e.g. 15 units)",
+      "Proceed to checkout and enable 'Simulate Gateway Payment Error'",
+      "Submit order and inspect product stock in database"
+    ],
+    "expected": "Payment fails and product stock remains 15 units.",
+    "actual": "Payment fails, but stock is decremented to 14 units.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "Database Transaction Rollback"
+  },
+  {
+    "id": "BUG-059",
+    "title": "Guest cart items saved in localStorage survive user logout",
+    "category": "DATABASE / STATE BUGS",
+    "difficulty": "MEDIUM",
+    "steps": [
+      "Add product as guest user",
+      "Log in and log out"
+    ],
+    "expected": "Guest session cart is cleared.",
+    "actual": "Guest cart items persist in localStorage after logout.",
+    "affected_component": "frontend/src/context/CartContext.tsx",
+    "related_concept": "State Persistence"
+  },
+  {
+    "id": "BUG-060",
+    "title": "Admin order status update DB write delay causes immediate re-fetch to show old status",
+    "category": "DATABASE / STATE BUGS",
+    "difficulty": "MEDIUM",
+    "steps": [
+      "Change order status in Admin panel",
+      "Immediately refresh page"
+    ],
+    "expected": "Shows updated order status.",
+    "actual": "Shows old status temporarily due to non-blocking DB transaction.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "Asynchronous State Synchronization"
+  },
+  {
+    "id": "BUG-061",
+    "title": "Adding same product twice creates duplicate cart rows instead of incrementing quantity",
+    "category": "DATABASE / STATE BUGS",
+    "difficulty": "HARD",
+    "steps": [
+      "Add 'Pro Wireless Headphones' to cart",
+      "Navigate back to product page and click 'Add to Cart' again"
+    ],
+    "expected": "Existing cart row quantity increments to 2.",
+    "actual": "Two separate cart rows created for the same product.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "Database Constraint / Logic"
+  },
+  {
+    "id": "BUG-062",
+    "title": "Rapidly double-clicking 'Complete Order' button creates duplicate orders in database",
+    "category": "DATABASE / STATE BUGS",
+    "difficulty": "HARD",
+    "steps": [
+      "On checkout page, double-click 'Complete Order' button rapidly"
+    ],
+    "expected": "Submit button disabled immediately upon first click.",
+    "actual": "Two identical orders created for single cart purchase.",
+    "affected_component": "frontend/src/pages/CheckoutPage.tsx",
+    "related_concept": "Idempotency / Race Condition"
+  },
+  {
+    "id": "BUG-063",
+    "title": "Search input fires un-debounced API request on every keystroke",
+    "category": "PERFORMANCE BUGS",
+    "difficulty": "MEDIUM",
+    "steps": [
+      "Open Browser DevTools Network tab",
+      "Type 'headphones' quickly in search input on /search"
+    ],
+    "expected": "Single debounced API request fired after typing stops.",
+    "actual": "10 separate API requests fired (one per character typed).",
+    "affected_component": "frontend/src/pages/SearchPage.tsx",
+    "related_concept": "Performance Testing"
+  },
+  {
+    "id": "BUG-064",
+    "title": "Product listing page fetches all products in single call when category filter is selected",
+    "category": "PERFORMANCE BUGS",
+    "difficulty": "MEDIUM",
+    "steps": [
+      "Select category 'Electronics' on /products",
+      "Inspect API request `GET /api/products?category=Electronics&page=1&limit=8`"
+    ],
+    "expected": "API returns 8 items for page 1.",
+    "actual": "API ignores limit and returns all catalog items.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "Performance Testing"
+  },
+  {
+    "id": "BUG-065",
+    "title": "GET /api/admin/orders endpoint executes N+1 database queries",
+    "category": "PERFORMANCE BUGS",
+    "difficulty": "MEDIUM",
+    "steps": [
+      "Navigate to /admin and select 'All Orders' tab",
+      "Inspect server query logs"
+    ],
+    "expected": "Orders fetched via SQL JOIN in single query.",
+    "actual": "Executes 1 query for orders + N queries for each order's user and items.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "Performance Testing / White Box"
+  },
+  {
+    "id": "BUG-066",
+    "title": "Hero banner image loads uncompressed 8MB high-res raw image",
+    "category": "PERFORMANCE BUGS",
+    "difficulty": "EASY",
+    "steps": [
+      "Navigate to Homepage /",
+      "Inspect image asset load size in Network tab"
+    ],
+    "expected": "Optimized web image (< 200KB).",
+    "actual": "Loads raw 8MB 4000px image.",
+    "affected_component": "frontend/src/pages/HomePage.tsx",
+    "related_concept": "Performance Testing"
+  },
+  {
+    "id": "BUG-067",
+    "title": "ProductCard component re-renders entire grid list on every hover state change",
+    "category": "PERFORMANCE BUGS",
+    "difficulty": "MEDIUM",
+    "steps": [
+      "Enable React DevTools Profiler 'Highlight updates'",
+      "Hover cursor over product card"
+    ],
+    "expected": "Only target hovered card updates.",
+    "actual": "All 8 product cards in grid re-render due to missing memoization.",
+    "affected_component": "frontend/src/components/ProductCard.tsx",
+    "related_concept": "Performance Testing"
+  },
+  {
+    "id": "BUG-068",
+    "title": "Checkout form layout breaks into overlapping column on tablet screen width (768px - 991px)",
+    "category": "RESPONSIVE / UI BUGS",
+    "difficulty": "EASY",
+    "steps": [
+      "Resize browser window width between 768px and 991px",
+      "View Checkout page layout"
+    ],
+    "expected": "Side-by-side or stacked clean layout.",
+    "actual": "Form and summary cards collapse into overlapping block.",
+    "affected_component": "frontend/src/index.css",
+    "related_concept": "Usability / Responsive Testing"
+  },
+  {
+    "id": "BUG-069",
+    "title": "Product grid card text overflows card boundary on 375px mobile viewport",
+    "category": "RESPONSIVE / UI BUGS",
+    "difficulty": "EASY",
+    "steps": [
+      "Emulate Mobile Viewport (375px) in Chrome DevTools",
+      "View /products catalog grid"
+    ],
+    "expected": "Product grid fits nicely within 375px viewport.",
+    "actual": "Right edge of grid card overflows viewport boundary by 25px.",
+    "affected_component": "frontend/src/index.css",
+    "related_concept": "Responsive Testing"
+  },
+  {
+    "id": "BUG-070",
+    "title": "Long product title 'Ultra-High Definition Noise Cancelling Wireless Headphones Pro Max' wraps into 4 lines expanding card height",
+    "category": "RESPONSIVE / UI BUGS",
+    "difficulty": "EASY",
+    "steps": [
+      "View product card for item SKU ELEC-LNG-030"
+    ],
+    "expected": "Title truncated with ellipsis (...).",
+    "actual": "Title stretches card container vertically, breaking grid alignment.",
+    "affected_component": "frontend/src/components/ProductCard.tsx",
+    "related_concept": "Usability Testing"
+  },
+  {
+    "id": "BUG-071",
+    "title": "Cart table quantity buttons squish outside viewport on mobile screens (< 576px)",
+    "category": "RESPONSIVE / UI BUGS",
+    "difficulty": "EASY",
+    "steps": [
+      "Open /cart on 400px mobile viewport"
+    ],
+    "expected": "Cart table horizontally scrolls or stacks items vertically.",
+    "actual": "Quantity buttons squished off-screen.",
+    "affected_component": "frontend/src/pages/CartPage.tsx",
+    "related_concept": "Responsive Testing"
+  },
+  {
+    "id": "BUG-072",
+    "title": "Coupon submit button on mobile viewport is hidden under fixed footer bar",
+    "category": "RESPONSIVE / UI BUGS",
+    "difficulty": "EASY",
+    "steps": [
+      "Open /checkout on mobile viewport",
+      "Scroll to coupon input box"
+    ],
+    "expected": "Submit button visible and accessible.",
+    "actual": "Button obscured under viewport footer.",
+    "affected_component": "frontend/src/index.css",
+    "related_concept": "Usability Testing"
+  },
+  {
+    "id": "BUG-073",
+    "title": "Filtering catalog by category 'InvalidCat' displays generic unhandled error screen",
+    "category": "ERROR HANDLING BUGS",
+    "difficulty": "MEDIUM",
+    "steps": [
+      "Click category pill 'InvalidCat' on /products"
+    ],
+    "expected": "Displays friendly message 'No products found in category'.",
+    "actual": "Renders blank error alert with raw exception text.",
+    "affected_component": "frontend/src/pages/ProductsPage.tsx",
+    "related_concept": "Error Handling Testing"
+  },
+  {
+    "id": "BUG-074",
+    "title": "Simulated payment timeout leaves 'Processing Payment...' loading spinner active indefinitely",
+    "category": "ERROR HANDLING BUGS",
+    "difficulty": "MEDIUM",
+    "steps": [
+      "On checkout, check 'Simulate Gateway Payment Error'",
+      "Click Complete Order"
+    ],
+    "expected": "Error message displayed and submit button re-enabled.",
+    "actual": "Submit button remains disabled in 'Processing Payment...' spinner state indefinitely.",
+    "affected_component": "frontend/src/pages/CheckoutPage.tsx",
+    "related_concept": "Error Recovery Testing"
+  },
+  {
+    "id": "BUG-075",
+    "title": "Invalid string product ID e.g. /products/abc triggers unhandled frontend error",
+    "category": "ERROR HANDLING BUGS",
+    "difficulty": "MEDIUM",
+    "steps": [
+      "Navigate to URL /products/abc"
+    ],
+    "expected": "Redirects to 404 Not Found page.",
+    "actual": "Throws uncaught JavaScript NaN exception.",
+    "affected_component": "frontend/src/pages/ProductDetailPage.tsx",
+    "related_concept": "Robustness Testing"
+  },
+  {
+    "id": "BUG-076",
+    "title": "Checkout failure clears cart items despite order placement error",
+    "category": "ERROR HANDLING BUGS",
+    "difficulty": "HARD",
+    "steps": [
+      "Check 'Simulate Gateway Payment Error' on checkout page",
+      "Submit order"
+    ],
+    "expected": "Order fails and items remain in cart for retry.",
+    "actual": "Order fails but backend deletes cart items anyway.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "Error Recovery / Transaction"
+  },
+  {
+    "id": "BUG-077",
+    "title": "Registration password mismatch server error returns generic 'Internal Error 500'",
+    "category": "ERROR HANDLING BUGS",
+    "difficulty": "MEDIUM",
+    "steps": [
+      "Navigate to /register",
+      "Enter password 'Password123' and confirmPassword 'DifferentPassword'",
+      "Submit form"
+    ],
+    "expected": "Validation message 'Passwords do not match'.",
+    "actual": "Displays 'Internal Error 500'.",
+    "affected_component": "backend/src/server.ts",
+    "related_concept": "Error Message Testing"
+  }
+]

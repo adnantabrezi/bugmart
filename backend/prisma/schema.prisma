@@ -1,0 +1,103 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int        @id @default(autoincrement())
+  name      String
+  email     String     @unique
+  password  String
+  role      String     @default("CUSTOMER") // CUSTOMER, ADMIN
+  age       Int?
+  address   String?
+  phone     String?
+  createdAt DateTime   @default(now())
+  cartItems CartItem[]
+  orders    Order[]
+  reviews   Review[]
+}
+
+model Product {
+  id          Int         @id @default(autoincrement())
+  name        String
+  description String
+  category    String
+  price       Float
+  discount    Float       @default(0) // Percentage discount e.g. 10
+  stock       Int
+  rating      Float       @default(4.5)
+  image       String
+  sku         String      @unique
+  isDeleted   Boolean     @default(false)
+  createdAt   DateTime    @default(now())
+  cartItems   CartItem[]
+  orderItems  OrderItem[]
+  reviews     Review[]
+}
+
+model CartItem {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now())
+}
+
+model Coupon {
+  id             Int      @id @default(autoincrement())
+  code           String   @unique
+  discountPercent Float   @default(0)
+  discountAmount  Float   @default(0)
+  minOrderAmount Float   @default(0)
+  maxDiscount    Float?
+  expiryDate     DateTime
+  isActive       Boolean  @default(true)
+}
+
+model Order {
+  id              Int         @id @default(autoincrement())
+  userId          Int
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subtotal        Float
+  tax             Float
+  shipping        Float
+  discountAmount  Float       @default(0)
+  totalAmount     Float
+  paymentMethod   String
+  status          String      @default("PENDING") // PENDING, PROCESSING, SHIPPED, DELIVERED, CANCELLED
+  shippingAddress String
+  contactPhone    String
+  createdAt       DateTime    @default(now())
+  orderItems      OrderItem[]
+}
+
+model OrderItem {
+  id        Int     @id @default(autoincrement())
+  orderId   Int
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  name      String
+  price     Float
+  quantity  Int
+  image     String
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userName  String
+  rating    Float
+  comment   String
+  createdAt DateTime @default(now())
+}
