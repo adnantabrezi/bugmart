@@ -1,7 +1,7 @@
 FROM node:18-alpine
 
-# Install PostgreSQL, su-exec, and system utilities
-RUN apk add --no-cache postgresql postgresql-contrib su-exec bash
+# Install PostgreSQL, su-exec, OpenSSL, and system utilities
+RUN apk add --no-cache postgresql postgresql-contrib su-exec bash openssl
 
 WORKDIR /app
 
@@ -26,7 +26,7 @@ COPY frontend/src ./frontend/src/
 RUN cd frontend && npm run build
 RUN cd backend && npm run build
 
-# Copy entrypoint script
+# Cache buster marker v2.0
 COPY entrypoint.sh ./
 RUN chmod +x entrypoint.sh
 
