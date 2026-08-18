@@ -1,15 +1,16 @@
 #!/bin/sh
 set -e
 
-echo "=== BugMart Single Container Render Boot ==="
+echo "=== BugMart Single Container Render Boot (v2.0 - Fixed Entrypoint) ==="
 
-# Create directories individually to prevent chown resolution errors
+# Create directories individually
 mkdir -p /var/lib/postgresql/data
 mkdir -p /var/run/postgresql
 mkdir -p /run/postgresql
 mkdir -p /var/log/postgresql
 
-chown -R postgres:postgres /var/lib/postgresql
+# Ensure ownership without throwing errors on symlinks
+chown -R postgres:postgres /var/lib/postgresql || true
 chown -R postgres:postgres /var/run/postgresql || true
 chown -R postgres:postgres /var/log/postgresql || true
 

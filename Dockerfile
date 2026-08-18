@@ -26,7 +26,7 @@ COPY frontend/src ./frontend/src/
 RUN cd frontend && npm run build
 RUN cd backend && npm run build
 
-# Copy entrypoint script
+# Cache buster marker v2.0
 COPY entrypoint.sh ./
 RUN chmod +x entrypoint.sh
 
