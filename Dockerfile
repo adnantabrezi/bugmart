@@ -1,7 +1,7 @@
 FROM node:18-alpine
 
-# Install PostgreSQL, su-exec, and system utilities
-RUN apk add --no-cache postgresql postgresql-contrib su-exec bash
+# Install PostgreSQL, su-exec, OpenSSL, and system utilities
+RUN apk add --no-cache postgresql postgresql-contrib su-exec bash openssl
 
 WORKDIR /app
 
