@@ -3,11 +3,13 @@ set -e
 
 echo "=== BugMart Single Container Render Boot ==="
 
+# Ensure postgres directories exist with proper ownership
+mkdir -p /var/lib/postgresql/data /run/postgresql /var/log/postgresql
+chown -R postgres:postgres /var/lib/postgresql /run/postgresql /var/log/postgresql
+
 # Initialize PostgreSQL data directory if not already created
 if [ ! -d "/var/lib/postgresql/data/base" ]; then
   echo "[PostgreSQL] Initializing data directory..."
-  mkdir -p /var/lib/postgresql/data
-  chown -R postgres:postgres /var/lib/postgresql /run/postgresql
   su-exec postgres initdb -D /var/lib/postgresql/data
   
   # Configure postgres auth
@@ -15,13 +17,9 @@ if [ ! -d "/var/lib/postgresql/data/base" ]; then
   echo "local all all trust" >> /var/lib/postgresql/data/pg_hba.conf
 fi
 
-# Ensure runtime folder permissions
-mkdir -p /run/postgresql
-chown -R postgres:postgres /run/postgresql
-
 # Start PostgreSQL server in background
 echo "[PostgreSQL] Starting database daemon..."
-su-exec postgres pg_ctl -D /var/lib/postgresql/data -l /var/lib/postgresql/logfile start
+su-exec postgres pg_ctl -D /var/lib/postgresql/data -l /var/log/postgresql/logfile start
 
 # Wait for PostgreSQL to be ready
 until su-exec postgres pg_isready; do
